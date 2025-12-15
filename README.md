@@ -49,11 +49,11 @@ pip install numpy matplotlib scipy
 
 ### Execution
 
-Each problem has its own dedicated script (e.g., `birthday_problem.py`). To run a specific demonstration:
+Each problem has its own dedicated script (e.g., `the_birthday_problem.ipynb`). To run a specific demonstration:
 
 ```bash
 # Example for the Birthday Problem
-python src/birthday_problem.py
+python src/the_birthday_problem.ipynb
 ```
 
 Check the individual directories (e.g., `/src`) for specific instructions and output file details.
