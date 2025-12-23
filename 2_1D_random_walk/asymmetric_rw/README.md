@@ -1,189 +1,151 @@
-# Asymmetric Random Walk: Drift–Diffusion as a Stochastic Model in Biophysics
+# Biased vs Unbiased Random Walk: Simulation and Theory
 
-## Overview
-
-This repository presents a **one-dimensional asymmetric (biased) random walk** as a minimal stochastic model for **directed transport** in biophysical and soft-matter systems.
-
-Unlike the symmetric random walk, where motion is purely diffusive, the asymmetric random walk incorporates **broken directional symmetry**, leading to the coexistence of **drift and diffusion**. The aim of this project is to demonstrate how deterministic-looking motion (drift) can emerge purely from probabilistic asymmetry, without invoking forces or potentials.
-
-This model serves as a foundational stepping stone toward understanding **active processes**, **molecular motors**, **driven polymers**, and **nonequilibrium stochastic dynamics**.
+This repository contains a Python notebook that demonstrates and compares **unbiased** and **biased one-dimensional random walks**, highlighting the emergence of **drift** due to broken symmetry in step probabilities. The results are validated against exact analytical predictions from probability theory and statistical physics.
 
 ---
 
-## Physical Motivation
+## 📌 Overview
 
-Many biological processes operate far from equilibrium. Examples include:
+A random walk is one of the simplest stochastic processes and serves as a foundational model for:
+- Brownian motion
+- Diffusion processes
+- Transport phenomena
+- Drift–diffusion dynamics
 
-* Motor-driven transport along cytoskeletal filaments
-* Directional translocation of polymers through pores
-* Active transport of proteins and vesicles
-* Drift induced by chemical or concentration gradients
+In this notebook, we study:
+- **Unbiased random walk**: equal probability of stepping left or right  
+- **Biased random walk**: unequal step probabilities, leading to systematic drift
 
-At coarse-grained scales, these processes can often be modeled as **biased stochastic motion**, where randomness persists but directional symmetry is broken.
-
-The asymmetric random walk captures this idea in its simplest form.
-
----
-
-## Model Definition
-
-### Asymmetric 1D Random Walk
-
-**Assumptions**
-
-* The particle moves along a one-dimensional line
-* Time is discrete
-* At each timestep, the particle moves:
-
-  * one step to the right with probability ( p )
-  * one step to the left with probability ( 1 - p )
-* Successive steps are independent
-* ( p \neq \frac{1}{2} ), introducing bias
-
-Mathematically:
-[
-x_{n+1} = x_n + \eta_n, \quad
-\eta_n \in {-1, +1}
-]
-with
-[
-P(\eta_n = +1) = p, \quad P(\eta_n = -1) = 1 - p
-]
-
-This model contains **no explicit forces**; directionality arises entirely from asymmetric probabilities.
+We compute and compare:
+- Mean position as a function of time
+- Simulation results vs analytical expressions
 
 ---
 
-## Quantities of Interest
+## 🔬 Physical Model
 
-### 1. Individual Trajectories
+### 1D Lattice Random Walk
 
-Single trajectories exhibit both random fluctuations and a systematic trend in the preferred direction. While noise remains strong at short times, long-time behavior becomes increasingly directional.
+At each discrete time step, a particle moves:
+- Right by \( +1 \) with probability \( p \)
+- Left by \( -1 \) with probability \( q = 1 - p \)
 
-This illustrates a key nonequilibrium concept:
-
-> deterministic motion can emerge from biased stochastic rules.
-
----
-
-### 2. Mean Displacement (Drift)
-
-The ensemble-averaged position grows linearly with time:
-[
-\langle x(t) \rangle = v t
-]
-
-where the drift velocity is:
-[
-v = (2p - 1)
-]
-
-Drift is therefore an **emergent quantity**, determined solely by the degree of asymmetry in step probabilities.
+Let \( x_N \) be the position after \( N \) steps.
 
 ---
 
-### 3. Mean Squared Displacement (MSD)
+## 📐 Analytical Results
 
-The mean squared displacement satisfies:
-[
-\langle [x(t) - \langle x(t) \rangle]^2 \rangle \propto t
-]
+### Mean Displacement
 
-This indicates that **diffusive spreading persists even in the presence of drift**.
+The expected displacement after \( N \) steps is
 
-The asymmetric random walk thus exhibits **drift–diffusion dynamics**, not pure diffusion.
-
----
-
-## Emergence of Drift–Diffusion
-
-Combining drift and fluctuations leads to:
-[
-\langle x^2(t) \rangle = (vt)^2 + 2Dt
-]
-
-Two qualitatively distinct contributions appear:
-
-* A deterministic term from bias
-* A stochastic term from randomness
-
-This decomposition is central to modeling nonequilibrium transport in biophysics.
+\[
+\langle x_N \rangle = (p - q) N = (2p - 1)N
+\]
 
 ---
 
-## Conceptual Lessons
+### Unbiased Random Walk (\( p = 0.5 \))
 
-The asymmetric random walk highlights several important modeling principles:
+\[
+\langle x_N \rangle = 0
+\]
 
-* Directional motion does not require deterministic forces
-* Nonequilibrium behavior can arise from probabilistic asymmetry
-* Drift and diffusion are not mutually exclusive
-* Bias alters means but does not eliminate fluctuations
-
-These ideas recur across biological transport phenomena.
-
----
-
-## Relation to Biophysical Systems
-
-The asymmetric random walk provides a minimal model for:
-
-* Molecular motor stepping
-* Directed polymer translocation
-* Active particle motion
-* Transport under chemical or mechanical gradients
-
-It also forms the discrete-time precursor to:
-
-* Langevin equations with constant force
-* Active Brownian particle models
-* Driven diffusive systems
+- No preferred direction
+- No drift
+- Motion is purely diffusive
 
 ---
 
-## Repository Contents
+### Biased Random Walk (\( p \neq 0.5 \))
 
-* `biased_random_walk.ipynb`
-  A Python notebook implementing the asymmetric 1D random walk, analyzing drift velocity, variance, and the coexistence of drift and diffusion.
+\[
+\langle x_N \rangle = v N
+\quad \text{with} \quad
+v = 2p - 1
+\]
 
-The implementation emphasizes clarity, minimal assumptions, and explicit statistical averaging.
-
----
-
-## Relation to the Symmetric Random Walk
-
-This model generalizes the symmetric random walk by breaking directional symmetry. In the limit:
-[
-p \rightarrow \frac{1}{2}
-]
-the asymmetric model reduces smoothly to pure diffusion.
-
-For conceptual clarity, the symmetric and asymmetric cases are treated as **distinct models** in separate repositories/notebooks.
+- Symmetry is broken
+- A finite **drift velocity** emerges
+- Mean position grows linearly with time
 
 ---
 
-## Suggested Extensions
+## 🧪 Simulation Details
 
-Natural extensions include:
+- Large ensemble of independent random walkers
+- Discrete time evolution
+- Mean position computed by averaging over realizations
+- Comparison with analytical predictions
 
-* Force-dependent bias ( p(F) )
-* First-passage times under drift
-* Biased motion under confinement
-* Time-dependent or fluctuating bias
-* Connection to continuous-time Langevin dynamics
-
----
-
-## References and Further Reading
-
-1. H. C. Berg, *Random Walks in Biology*
-2. N. G. van Kampen, *Stochastic Processes in Physics and Chemistry*
-3. C. W. Gardiner, *Stochastic Methods*
-4. R. Zwanzig, *Nonequilibrium Statistical Mechanics*
-5. J. Tailleur and M. Cates, *Statistical Mechanics of Interacting Run-and-Tumble Bacteria*
+The notebook visualizes:
+- Simulated mean position
+- Exact analytical mean for both cases
 
 ---
 
-## Intended Audience
+## 📊 Key Results
 
-This repository is intended for students and researchers seeking a **physics-grounded understanding of directed stochastic transport**, particularly in biological and nonequilibrium systems that signals postdoc-level modeling skills.
+- **Unbiased walk**:  
+  Mean position fluctuates around zero, confirming the absence of drift.
+
+- **Biased walk**:  
+  Mean position grows linearly with time.  
+  The slope of the curve gives the drift velocity:
+  \[
+  v_{\text{sim}} \approx v_{\text{theory}} = 2p - 1
+  \]
+
+The simulation and analytical curves show excellent agreement, validating the theoretical description.
+
+---
+
+## 🧠 Physical Interpretation
+
+- The unbiased walk models **pure diffusion**, where fluctuations grow but the average position remains fixed.
+- The biased walk models **drift–diffusion**, relevant to:
+  - Charged particles in an electric field
+  - Molecular transport under external forces
+  - Nonequilibrium stochastic processes
+
+The linear growth of the mean position is a direct manifestation of **broken detailed balance**.
+
+---
+
+## 🛠 Requirements
+
+- Python 3.x
+- NumPy
+- Matplotlib
+- Jupyter Notebook
+
+---
+
+## 📁 Files
+
+- `biased_vs_unbiased_random_walk.ipynb`  
+  Main notebook containing simulations, theory, and plots.
+
+---
+
+## 🚀 Possible Extensions
+
+- Mean squared displacement and diffusion coefficient
+- Central Limit Theorem verification
+- Connection to the Fokker–Planck equation
+- First-passage time statistics
+- Continuous-time random walks
+
+---
+
+## ✍️ Author
+
+Akshay Chauhan  
+Computational & Statistical Physics
+
+---
+
+## 📜 License
+
+This project is released under the MIT License.
